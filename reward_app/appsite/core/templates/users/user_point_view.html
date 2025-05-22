@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Tasks</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .task-item {
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            background-color: #fff;
+        }
+        .home-btn {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <a href="{% url 'user_home' %}">
+                <button type="button" class="btn btn-outline-primary">Home</button>
+            </a>
+            <h3 class="text-end">Total Points Earned: {{ total_points }}</h3>
+        </div>
+
+        {% for task in tasks %}
+            <div class="task-item">
+                <strong>App Name: {{ task.app.app_name }}</strong><br>
+                Points: {{ task.points }}<br>
+                Completed on: {{ task.uploaded_at|date:"Y-m-d H:i" }}
+            </div>
+        {% empty %}
+            <p class="text-muted">No tasks completed yet.</p>
+        {% endfor %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+

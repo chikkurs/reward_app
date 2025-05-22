@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<div class="container my-5">
+
+    <!-- Success alert -->
+    {% if submitted %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        App added successfully!
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endif %}
+
+    <!-- Header and Buttons -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Admin Dashboard</h2>
+        <div>
+            <a href="{% url 'add_app' %}" class="btn btn-success me-2">Add App</a>
+            <form action="{% url 'admin_logout' %}" method="post" class="d-inline">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Logout</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- App List -->
+    <h4 class="mb-3">All Added Apps</h4>
+
+    {% if apps %}
+        <div class="list-group">
+            {% for app in apps %}
+            <div class="list-group-item mb-3 shadow-sm">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h5 class="mb-1">{{ app.app_name }}</h5>
+                        <p class="mb-1">
+                            <strong>Link:</strong> <a href="{{ app.app_link }}" target="_blank">{{ app.app_link }}</a><br>
+                            <strong>Category:</strong> {{ app.category }} / {{ app.sub_category }}<br>
+                            <strong>Points:</strong> {{ app.points }}<br>
+                            <strong></strong> <img src="{{ app.icon.url }}" alt="{{ app.app_name }}" width="50">
+                        </p>
+                    </div>
+                    <div class="text-end">
+                        <form action="{% url 'edit_app' app.id %}" method="GET" class="d-inline-block mb-1">
+                            <button type="submit" class="btn btn-primary btn-sm">Edit</button>
+                        </form>
+                        <form action="{% url 'delete_app' app.id %}" method="POST" class="d-inline-block">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-outline-danger btn-sm"
+                                onclick="return confirm('Are you sure you want to delete this app?');">
+                                Delete
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-muted">No apps added yet.</p>
+    {% endif %}
+</div>
+
+<!-- Bootstrap JS (for alert dismiss) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
